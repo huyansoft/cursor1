@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>销售数据详情 - 二手车销售管理系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/preview-fix.css" id="preview-fix-css">
+    <style>
+        .page-header {
+            background-color: var(--primary-color);
+            background-image: url('../assets/images/bg-profile.jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            color: white;
+            padding: 1.5rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 10;
+        }
+        
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(30,41,59,0.85), rgba(30,41,59,0.95));
+            z-index: -1;
+        }
+        
+        .avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.7);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            transition: all 0.2s ease;
+        }
+        
+        .avatar:active {
+            transform: scale(0.95);
+        }
+        
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .data-card {
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .data-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .data-table {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+        
+        .data-table th {
+            text-align: left;
+            padding: 0.5rem;
+            font-weight: 500;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background-color: #f9fafb;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .data-table td {
+            padding: 0.75rem 0.5rem;
+            font-size: 0.875rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .card-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-title i {
+            margin-right: 0.5rem;
+            color: var(--secondary-color);
+        }
+        
+        .stats-container {
+            display: flex;
+            margin-top: 0.75rem;
+        }
+        
+        .stats-item {
+            flex: 1;
+            text-align: center;
+            padding: 0.75rem 0.5rem;
+            border-right: 1px solid var(--border-color);
+        }
+        
+        .stats-item:last-child {
+            border-right: none;
+        }
+        
+        .stats-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stats-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .small-chart {
+            height: 40px;
+            display: flex;
+            align-items: flex-end;
+            margin: 0.5rem 0;
+            padding: 0 0.5rem;
+        }
+        
+        .chart-bar {
+            flex: 1;
+            background-color: var(--secondary-color);
+            margin: 0 1px;
+            border-radius: 2px 2px 0 0;
+            transition: height 0.3s ease;
+        }
+        
+        .positive {
+            color: #10b981;
+        }
+        
+        .negative {
+            color: #ef4444;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.125rem 0.375rem;
+            border-radius: 9999px;
+            font-size: 0.625rem;
+            font-weight: 500;
+        }
+        
+        .badge-blue {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+        
+        .badge-green {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+        
+        .badge-amber {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+        
+        .badge-red {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        
+        .tab-container {
+            display: flex;
+            background-color: #f1f5f9;
+            border-radius: 9999px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem 0;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+        
+        .tab.active {
+            background-color: white;
+            color: var(--secondary-color);
+            font-weight: 500;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .data-card {
+            animation: fadeInUp 0.4s ease forwards;
+            opacity: 0;
+        }
+        
+        .data-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+        
+        .data-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .data-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+        
+        .data-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="app-container">
+        <!-- 页面头部 -->
+        <div class="page-header">
+            <div>
+                <a href="profile.html" class="back-button mr-2">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <h1 class="text-lg font-semibold">销售数据详情</h1>
+            </div>
+            
+            <a href="profile.html" class="avatar">
+                <img src="../assets/images/real-avatar.jpg" alt="个人头像">
+            </a>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="p-4 pb-20">
+            <!-- 时间筛选 -->
+            <div class="tab-container">
+                <div class="tab">今日</div>
+                <div class="tab">本周</div>
+                <div class="tab active">本月</div>
+                <div class="tab">季度</div>
+                <div class="tab">全年</div>
+            </div>
+            
+            <!-- 销售业绩 -->
+            <div class="data-card">
+                <div class="card-title">
+                    <i class="bi bi-graph-up"></i>
+                    销售业绩
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stats-item">
+                        <div class="stats-value">132.8万</div>
+                        <div class="stats-label">销售金额</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="stats-value">12台</div>
+                        <div class="stats-label">销售台数</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="stats-value">11.1万</div>
+                        <div class="stats-label">平均单价</div>
+                    </div>
+                </div>
+                
+                <div class="small-chart">
+                    <div class="chart-bar" style="height: 60%;"></div>
+                    <div class="chart-bar" style="height: 80%;"></div>
+                    <div class="chart-bar" style="height: 40%;"></div>
+                    <div class="chart-bar" style="height: 90%;"></div>
+                    <div class="chart-bar" style="height: 75%;"></div>
+                    <div class="chart-bar" style="height: 50%;"></div>
+                    <div class="chart-bar" style="height: 65%;"></div>
+                </div>
+                
+                <div class="flex justify-between items-center text-xs text-gray-500">
+                    <div>最近7天趋势</div>
+                    <div class="positive flex items-center">
+                        <i class="bi bi-arrow-up-short"></i>
+                        <span>较上月同期 +12.5%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 客户分析 -->
+            <div class="data-card">
+                <div class="card-title">
+                    <i class="bi bi-people"></i>
+                    客户分析
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stats-item">
+                        <div class="stats-value">167</div>
+                        <div class="stats-label">新获线索</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="stats-value">86</div>
+                        <div class="stats-label">有效客户</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="stats-value">51.5%</div>
+                        <div class="stats-label">转化率</div>
+                    </div>
+                </div>
+                
+                <div class="small-chart">
+                    <div class="chart-bar" style="height: 70%; background-color: #3b82f6;"></div>
+                    <div class="chart-bar" style="height: 85%; background-color: #3b82f6;"></div>
+                    <div class="chart-bar" style="height: 60%; background-color: #3b82f6;"></div>
+                    <div class="chart-bar" style="height: 90%; background-color: #3b82f6;"></div>
+                    <div class="chart-bar" style="height: 55%; background-color: #3b82f6;"></div>
+                    <div class="chart-bar" style="height: 75%; background-color: #3b82f6;"></div>
+                    <div class="chart-bar" style="height: 80%; background-color: #3b82f6;"></div>
+                </div>
+                
+                <div class="flex justify-between items-center text-xs text-gray-500">
+                    <div>最近7天趋势</div>
+                    <div class="positive flex items-center">
+                        <i class="bi bi-arrow-up-short"></i>
+                        <span>较上月同期 +8.2%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 热销车型 -->
+            <div class="data-card">
+                <div class="card-title">
+                    <i class="bi bi-car-front"></i>
+                    热销车型
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>车型</th>
+                            <th>销量</th>
+                            <th>金额</th>
+                            <th>同比</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>本田雅阁 2.0T</td>
+                            <td>8台</td>
+                            <td>¥128万</td>
+                            <td><span class="positive">+12%</span></td>
+                        </tr>
+                        <tr>
+                            <td>丰田卡罗拉</td>
+                            <td>7台</td>
+                            <td>¥98万</td>
+                            <td><span class="positive">+5%</span></td>
+                        </tr>
+                        <tr>
+                            <td>大众帕萨特</td>
+                            <td>6台</td>
+                            <td>¥90万</td>
+                            <td><span class="negative">-3%</span></td>
+                        </tr>
+                        <tr>
+                            <td>日产轩逸</td>
+                            <td>5台</td>
+                            <td>¥75万</td>
+                            <td><span class="positive">+8%</span></td>
+                        </tr>
+                        <tr>
+                            <td>马自达阿特兹</td>
+                            <td>4台</td>
+                            <td>¥68万</td>
+                            <td><span class="negative">-2%</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 成交记录 -->
+            <div class="data-card">
+                <div class="card-title">
+                    <i class="bi bi-currency-yen"></i>
+                    最近成交
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>车型</th>
+                            <th>客户</th>
+                            <th>金额</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>08-18</td>
+                            <td>奔驰E级</td>
+                            <td>李先生</td>
+                            <td>¥38.5万</td>
+                        </tr>
+                        <tr>
+                            <td>08-15</td>
+                            <td>宝马3系</td>
+                            <td>王女士</td>
+                            <td>¥32.8万</td>
+                        </tr>
+                        <tr>
+                            <td>08-12</td>
+                            <td>丰田汉兰达</td>
+                            <td>张先生</td>
+                            <td>¥29.6万</td>
+                        </tr>
+                        <tr>
+                            <td>08-10</td>
+                            <td>奥迪A6L</td>
+                            <td>刘女士</td>
+                            <td>¥42.5万</td>
+                        </tr>
+                        <tr>
+                            <td>08-05</td>
+                            <td>本田雅阁</td>
+                            <td>赵先生</td>
+                            <td>¥18.9万</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <button class="w-full py-2 mt-3 bg-white border border-gray-200 rounded-lg text-xs font-medium">查看更多记录</button>
+            </div>
+        </div>
+        
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+            <a href="dashboard.html" class="bottom-nav-item">
+                <i class="bi bi-house-door"></i>
+                <span>首页</span>
+            </a>
+            <a href="leads.html" class="bottom-nav-item">
+                <i class="bi bi-funnel"></i>
+                <span>线索</span>
+            </a>
+            <a href="customers.html" class="bottom-nav-item">
+                <i class="bi bi-people"></i>
+                <span>客户</span>
+            </a>
+            <a href="analytics.html" class="bottom-nav-item">
+                <i class="bi bi-bar-chart"></i>
+                <span>数据</span>
+            </a>
+            <a href="profile.html" class="bottom-nav-item active">
+                <i class="bi bi-person"></i>
+                <span>我的</span>
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 选项卡切换
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 这里可以添加数据刷新逻辑
+                });
+            });
+            
+            // 图表动画
+            const bars = document.querySelectorAll('.chart-bar');
+            bars.forEach(bar => {
+                const height = bar.style.height;
+                bar.style.height = '0';
+                setTimeout(() => {
+                    bar.style.height = height;
+                }, 300);
+            });
+            
+            // 卡片点击效果
+            const cards = document.querySelectorAll('.data-card');
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

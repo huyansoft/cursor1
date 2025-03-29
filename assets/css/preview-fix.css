@@ -1,0 +1,255 @@
+/* 预览框显示修复样式 */
+html, body {
+    height: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+    font-size: 14px !important;
+    background-color: #f8fafc !important;
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* IE and Edge */
+}
+
+.app-container {
+    max-width: 100% !important;
+    height: 100% !important;
+    padding-bottom: 3.5rem !important;
+    overflow-x: hidden !important;
+    position: relative !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* IE and Edge */
+    -webkit-overflow-scrolling: touch !important;
+}
+
+.app-container > header,
+.app-container > div {
+    flex-shrink: 0 !important;
+}
+
+.bottom-nav {
+    padding: 0.35rem 0.5rem !important;
+    box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1) !important;
+    height: auto !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 1000 !important;
+}
+
+.bottom-nav-item {
+    font-size: 1.1rem !important;
+    padding: 0.25rem 0 !important;
+}
+
+.bottom-nav-item span {
+    font-size: 0.65rem !important;
+    margin-top: 0.15rem !important;
+}
+
+.page-header {
+    position: relative !important;
+    top: auto !important;
+}
+
+/* 修复固定元素的定位 */
+.fixed, [style*="position: fixed"] {
+    position: fixed !important;
+}
+
+/* 去除所有滚动条 */
+html, body, div, main, section, article, aside, header, footer, nav,
+.app-container, .page-container, .content-container, .card, .chat-container,
+.list, .table-container, [class*="scroll"], [class*="overflow"] {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+    scrollbar-color: transparent transparent !important;
+}
+
+::-webkit-scrollbar,
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-track-piece,
+::-webkit-scrollbar-corner,
+::-webkit-resizer {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+* {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+*::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* 优化预览容器的样式 */
+.app-container {
+    height: auto !important;
+    min-height: 100vh !important;
+    max-height: none !important;
+    overflow: hidden !important;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 修复底部导航 */
+.bottom-nav {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin-bottom: 0 !important;
+    z-index: 1000 !important;
+}
+
+/* 为底部留出空间 */
+.pb-20, .pb-24, .pb-16 {
+    padding-bottom: 5rem !important;
+}
+
+/* 修复iframe中特定页面的样式 */
+.similar-cars-container {
+    overflow-x: hidden !important;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.similar-car {
+    flex: 0 0 auto;
+}
+
+/* 确保表格不滚动 */
+table {
+    width: 100% !important;
+    display: table !important;
+    table-layout: fixed !important;
+    overflow: hidden !important;
+}
+
+/* 确保内容不超出容器 */
+img, picture, video {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* 修复特定页面的CSS问题 */
+/* 车辆详情页 */
+.vehicle-swiper {
+    height: auto !important;
+    min-height: 200px !important;
+}
+
+/* 修复页面内容溢出问题 */
+.mx-4 {
+    margin-left: 1rem !important;
+    margin-right: 1rem !important;
+    width: auto !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* 在小窗口中优化显示 */
+@media (max-width: 380px) {
+    .feature-item {
+        width: 50% !important;
+    }
+    
+    .vehicle-tag {
+        font-size: 0.6rem !important;
+        padding: 0.1rem 0.3rem !important;
+        margin-right: 0.2rem !important;
+        margin-bottom: 0.2rem !important;
+    }
+    
+    .grid-cols-2 {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .similar-car {
+        width: 120px !important;
+    }
+    
+    .text-xs {
+        font-size: 0.65rem !important;
+    }
+    
+    .text-sm {
+        font-size: 0.75rem !important;
+    }
+}
+
+/* 增加内容密度 */
+h1, h2, h3 {
+    margin-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+p {
+    margin-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.card, .stats-card {
+    margin-bottom: 0.5rem !important;
+    padding: 0.625rem !important;
+}
+
+.mb-4 {
+    margin-bottom: 0.75rem !important;
+}
+
+.p-4 {
+    padding: 0.625rem !important;
+}
+
+/* 调整字体大小 */
+.text-xs {
+    font-size: 0.65rem !important;
+}
+
+.text-sm {
+    font-size: 0.75rem !important;
+}
+
+.text-base {
+    font-size: 0.85rem !important;
+}
+
+.text-lg {
+    font-size: 0.95rem !important;
+}
+
+.text-xl {
+    font-size: 1.1rem !important;
+}
+
+/* 调整视觉体验 */
+button, .btn {
+    font-size: 0.75rem !important;
+    padding: 0.375rem 0.75rem !important;
+}
+
+input, select, textarea {
+    font-size: 0.8rem !important;
+}
+
+/* 确保头像圆形 */
+.hero-avatar, .avatar {
+    border-radius: 50% !important;
+    overflow: hidden !important;
+} 

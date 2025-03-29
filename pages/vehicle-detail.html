@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>车辆详情 - 二手车销售管理系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .vehicle-swiper {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+            border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+            background-color: #f3f4f6;
+        }
+        
+        .vehicle-image {                                                            
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .swiper-pagination {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            z-index: 10;
+        }
+        
+        .swiper-pagination-bullet {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            margin: 0 3px;
+        }
+        
+        .swiper-pagination-bullet-active {
+            background-color: white;
+        }
+        
+        .vehicle-info-box {
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .vehicle-info-box:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .vehicle-info-section {
+            padding-bottom: 0.75rem;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .vehicle-info-section:last-child {
+            padding-bottom: 0;
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .vehicle-tag {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.625rem;
+            font-weight: 500;
+            margin-right: 0.375rem;
+            margin-bottom: 0.375rem;
+        }
+        
+        .section-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .vehicle-spec {
+            display: flex;
+            background-color: #f8fafc;
+            padding: 0.6rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            align-items: center;
+        }
+        
+        .vehicle-spec > div {
+            display: flex;
+            align-items: center;
+        }
+        
+        .spec-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.5rem;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.5rem;
+            font-size: 1rem;
+            color: var(--primary-color);
+            flex-shrink: 0;
+        }
+        
+        .spec-title {
+            font-size: 0.65rem;
+            color: var(--text-light);
+            white-space: nowrap;
+            display: inline-block;
+            margin-right: 0.4rem;
+        }
+        
+        .spec-value {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            white-space: nowrap;
+            display: inline-block;
+        }
+        
+        .feature-row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .feature-item {
+            width: 33.333%;
+            font-size: 0.75rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-check {
+            color: var(--secondary-color);
+            margin-right: 0.25rem;
+        }
+        
+        .similar-car {
+            width: 160px;
+            flex-shrink: 0;
+            background-color: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            margin-right: 0.75rem;
+        }
+        
+        .similar-car-img {
+            width: 100%;
+            height: 90px;
+            object-fit: cover;
+        }
+        
+        .similar-cars-container {
+            display: flex;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            margin: 0 -1rem;
+            padding: 0 1rem;
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+        
+        .similar-cars-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .favorite-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--text-light);
+            z-index: 10;
+        }
+        
+        .share-button {
+            position: absolute;
+            top: 1rem;
+            right: 4rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--text-light);
+            z-index: 10;
+        }
+        
+        .bottom-actions {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            padding: 0.75rem 1rem;
+            box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            z-index: 20;
+        }
+        
+        .action-button {
+            padding: 0.75rem 0;
+            text-align: center;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .action-button:active {
+            transform: scale(0.96);
+        }
+        
+        .contact-seller {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #e85071 100%);
+            box-shadow: 0 2px 8px rgba(232, 80, 113, 0.3);
+            color: white;
+        }
+        
+        .vehicle-price-history {
+            height: 100px;
+            position: relative;
+            margin: 1rem 0;
+            padding-bottom: 1rem;
+        }
+        
+        .price-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #e2e8f0;
+        }
+        
+        .price-line-1 {
+            top: 25%;
+        }
+        
+        .price-line-2 {
+            top: 50%;
+        }
+        
+        .price-line-3 {
+            top: 75%;
+        }
+        
+        .price-point {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            transform: translate(-50%, -50%);
+        }
+        
+        .price-point-text {
+            position: absolute;
+            font-size: 0.625rem;
+            color: var(--text-light);
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+        
+        .price-point-current {
+            background-color: var(--secondary-color);
+            width: 12px;
+            height: 12px;
+        }
+        
+        .price-connector {
+            position: absolute;
+            height: 2px;
+            background-color: var(--primary-color);
+            z-index: -1;
+        }
+        
+        /* 添加新样式：图片轮播切换 */
+        .swiper-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: #4a5568;
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .swiper-button:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .swiper-button-prev {
+            left: 0.5rem;
+        }
+        
+        .swiper-button-next {
+            right: 0.5rem;
+        }
+        
+        /* 图片预加载隐藏 */
+        .preload-images {
+            display: none;
+        }
+        
+        /* 价格标签样式美化 */
+        .price-tag {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            position: relative;
+        }
+        
+        .price-tag::after {
+            content: '';
+            position: absolute;
+            width: 0.5rem;
+            height: 0.5rem;
+            background-color: var(--secondary-color);
+            right: -0.25rem;
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+        }
+        
+        /* 车辆详情页图片浏览指示器 */
+        .image-indicator {
+            display: flex;
+            position: absolute;
+            bottom: 3.5rem;
+            right: 1rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+        }
+        
+        /* 添加动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* 确保车辆详情页滚动条完全隐藏 */
+        html, body, .app-container, .similar-cars-container, div, main, section, article, aside, header, footer, nav {
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+            scrollbar-color: transparent transparent !important;
+        }
+
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar,
+        .app-container::-webkit-scrollbar,
+        .similar-cars-container::-webkit-scrollbar,
+        div::-webkit-scrollbar,
+        main::-webkit-scrollbar,
+        section::-webkit-scrollbar,
+        article::-webkit-scrollbar,
+        aside::-webkit-scrollbar,
+        header::-webkit-scrollbar,
+        footer::-webkit-scrollbar,
+        nav::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            background: transparent !important;
+        }
+
+        /* 优化在iframe中的显示 */
+        @media (max-width: 400px) {
+            .feature-item {
+                width: 50%;
+            }
+            
+            .similar-car {
+                width: 130px;
+            }
+            
+            .vehicle-spec {
+                padding: 0.5rem;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .feature-item {
+                width: 50% !important;
+            }
+            
+            .vehicle-tag {
+                font-size: 0.6rem !important;
+                padding: 0.1rem 0.3rem !important;
+                margin-right: 0.2rem !important;
+                margin-bottom: 0.2rem !important;
+            }
+            
+            .grid-cols-2 {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .similar-car {
+                width: 120px !important;
+            }
+            
+            .text-xs {
+                font-size: 0.65rem !important;
+            }
+            
+            .text-sm {
+                font-size: 0.75rem !important;
+            }
+            
+            .vehicle-spec {
+                padding: 0.4rem 0.5rem;
+            }
+            
+            .spec-icon {
+                width: 1.75rem;
+                height: 1.75rem;
+                font-size: 0.85rem;
+                margin-right: 0.375rem;
+            }
+            
+            .spec-title {
+                font-size: 0.6rem;
+                margin-right: 0.2rem;
+            }
+            
+            .spec-value {
+                font-size: 0.65rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="app-container">
+        <!-- 页面头部 -->
+        <div class="page-header">
+            <a href="dashboard.html" class="back-button">
+                <i class="bi bi-chevron-left"></i>
+            </a>
+            <h1>车辆详情</h1>
+            <a href="#" class="text-gray-800">
+                <i class="bi bi-three-dots-vertical"></i>
+            </a>
+        </div>
+
+        <!-- 车辆轮播图 -->
+        <div class="vehicle-swiper">
+            <img src="https://cdn.pixabay.com/photo/2017/03/27/14/56/auto-2179220_1280.jpg" alt="奔驰E级" class="vehicle-image" id="mainCarImage">
+            
+            <div class="swiper-button swiper-button-prev" onclick="changeImage(-1)">
+                <i class="bi bi-chevron-left"></i>
+            </div>
+            
+            <div class="swiper-button swiper-button-next" onclick="changeImage(1)">
+                <i class="bi bi-chevron-right"></i>
+            </div>
+            
+            <div class="image-indicator">
+                <span id="currentImageIndex">1</span>/<span id="totalImages">5</span>
+            </div>
+            
+            <div class="swiper-pagination">
+                <div class="swiper-pagination-bullet swiper-pagination-bullet-active" onclick="setImage(0)"></div>
+                <div class="swiper-pagination-bullet" onclick="setImage(1)"></div>
+                <div class="swiper-pagination-bullet" onclick="setImage(2)"></div>
+                <div class="swiper-pagination-bullet" onclick="setImage(3)"></div>
+                <div class="swiper-pagination-bullet" onclick="setImage(4)"></div>
+            </div>
+            
+            <button class="favorite-button">
+                <i class="bi bi-heart"></i>
+            </button>
+            
+            <button class="share-button">
+                <i class="bi bi-share"></i>
+            </button>
+        </div>
+
+        <!-- 图片预加载 -->
+        <div class="preload-images">
+            <img src="https://cdn.pixabay.com/photo/2017/03/27/14/56/auto-2179220_1280.jpg" alt="奔驰E级外观">
+            <img src="https://cdn.pixabay.com/photo/2016/12/07/21/50/car-1890494_1280.jpg" alt="奔驰E级内饰">
+            <img src="https://cdn.pixabay.com/photo/2016/04/19/06/03/mercedes-1338063_1280.jpg" alt="奔驰E级正前">
+            <img src="https://cdn.pixabay.com/photo/2017/06/29/09/12/car-2453605_1280.jpg" alt="奔驰E级侧面">
+            <img src="https://cdn.pixabay.com/photo/2019/07/18/17/19/auto-4346882_1280.jpg" alt="奔驰E级后视">
+        </div>
+
+        <!-- 车辆基本信息 -->
+        <div class="mx-4 mt-4">
+            <div class="vehicle-info-box">
+                <div class="vehicle-info-section">
+                    <h2 class="text-lg font-semibold text-gray-800">奔驰 E级 2019款 2.0T</h2>
+                    <p class="text-sm text-gray-500 mt-1">豪华轿车 | 自动挡 | 汽油</p>
+                    
+                    <div class="mt-2">
+                        <span class="vehicle-tag bg-blue-100 text-blue-600">准新车</span>
+                        <span class="vehicle-tag bg-green-100 text-green-600">全保养记录</span>
+                        <span class="vehicle-tag bg-purple-100 text-purple-600">一手车</span>
+                        <span class="vehicle-tag bg-amber-100 text-amber-600">原厂质保</span>
+                    </div>
+                </div>
+                
+                <div class="vehicle-info-section">
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="text-center">
+                            <div class="text-sm text-gray-500">表显里程</div>
+                            <div class="text-base font-semibold text-gray-800 mt-1">3.2万公里</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-sm text-gray-500">上牌时间</div>
+                            <div class="text-base font-semibold text-gray-800 mt-1">2019年9月</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-sm text-gray-500">排量/功率</div>
+                            <div class="text-base font-semibold text-gray-800 mt-1">2.0T/184马力</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center">
+                    <div>
+                        <div class="text-xs text-gray-500">新车指导价</div>
+                        <div class="text-sm text-gray-500 line-through">¥53.89万</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs text-gray-500">二手车价格</div>
+                        <div class="text-2xl font-bold text-secondary">¥32.8万</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 车辆价格走势 -->
+        <div class="mx-4">
+            <div class="vehicle-info-box">
+                <div class="section-title">
+                    <i class="bi bi-graph-up-arrow text-primary mr-1"></i>
+                    <span>价格走势</span>
+                </div>
+                
+                <div class="vehicle-price-history">
+                    <div class="price-line price-line-1"></div>
+                    <div class="price-line price-line-2"></div>
+                    <div class="price-line price-line-3"></div>
+                    
+                    <!-- 价格点 -->
+                    <div class="price-point" style="left: 10%; top: 65%;"></div>
+                    <div class="price-point-text" style="left: 10%; top: 75%;">2019年</div>
+                    
+                    <div class="price-point" style="left: 30%; top: 45%;"></div>
+                    <div class="price-point-text" style="left: 30%; top: 55%;">2020年</div>
+                    
+                    <div class="price-point" style="left: 50%; top: 35%;"></div>
+                    <div class="price-point-text" style="left: 50%; top: 45%;">2021年</div>
+                    
+                    <div class="price-point" style="left: 70%; top: 25%;"></div>
+                    <div class="price-point-text" style="left: 70%; top: 35%;">2022年</div>
+                    
+                    <div class="price-point price-point-current" style="left: 90%; top: 20%;"></div>
+                    <div class="price-point-text" style="left: 90%; top: 30%; color: var(--secondary-color); font-weight: 500;">2023年</div>
+                    
+                    <!-- 连接线 -->
+                    <div class="price-connector" style="left: 10%; width: 20%; top: 65%; transform: rotate(-20deg); transform-origin: left center;"></div>
+                    <div class="price-connector" style="left: 30%; width: 20%; top: 45%; transform: rotate(-10deg); transform-origin: left center;"></div>
+                    <div class="price-connector" style="left: 50%; width: 20%; top: 35%; transform: rotate(-10deg); transform-origin: left center;"></div>
+                    <div class="price-connector" style="left: 70%; width: 20%; top: 25%; transform: rotate(-5deg); transform-origin: left center;"></div>
+                </div>
+                
+                <div class="text-xs text-gray-500 text-center">
+                    本车型自新车以来降价幅度达 <span class="text-secondary font-medium">39.1%</span>，当前价格处于 <span class="text-accent font-medium">近期低位</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 卖家信息 -->
+        <div class="mx-4">
+            <div class="vehicle-info-box">
+                <div class="section-title">
+                    <i class="bi bi-shop text-primary mr-1"></i>
+                    <span>卖家信息</span>
+                </div>
+                
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mr-3">
+                        <i class="bi bi-person text-gray-500"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-medium text-gray-800">张先生（车商）</div>
+                        <div class="text-xs text-gray-500 mt-0.5">已认证车商 | 在售车辆 32台</div>
+                    </div>
+                    <div class="flex items-center text-xs text-gray-500">
+                        <i class="bi bi-star-fill text-yellow-400 mr-0.5"></i>
+                        <span>4.8</span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-2 mt-3">
+                    <div class="text-xs text-gray-500 flex items-center">
+                        <i class="bi bi-geo-alt text-gray-400 mr-1"></i>
+                        <span>北京市朝阳区东四环</span>
+                    </div>
+                    <div class="text-xs text-gray-500 flex items-center">
+                        <i class="bi bi-shield-check text-gray-400 mr-1"></i>
+                        <span>车源已完成平台检测</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 车辆配置 -->
+        <div class="mx-4">
+            <div class="vehicle-info-box">
+                <div class="section-title">
+                    <i class="bi bi-car-front text-primary mr-1"></i>
+                    <span>车辆配置</span>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <div class="vehicle-spec">
+                        <div class="spec-icon">
+                            <i class="bi bi-calendar-check"></i>
+                        </div>
+                        <div>
+                            <span class="spec-title">车龄</span>
+                            <span class="spec-value">4年2个月</span>
+                        </div>
+                    </div>
+                    
+                    <div class="vehicle-spec">
+                        <div class="spec-icon">
+                            <i class="bi bi-speedometer2"></i>
+                        </div>
+                        <div>
+                            <span class="spec-title">表显里程</span>
+                            <span class="spec-value">3.2万公里</span>
+                        </div>
+                    </div>
+                    
+                    <div class="vehicle-spec">
+                        <div class="spec-icon">
+                            <i class="bi bi-fuel-pump"></i>
+                        </div>
+                        <div>
+                            <span class="spec-title">排量</span>
+                            <span class="spec-value">2.0T</span>
+                        </div>
+                    </div>
+                    
+                    <div class="vehicle-spec">
+                        <div class="spec-icon">
+                            <i class="bi bi-gear"></i>
+                        </div>
+                        <div>
+                            <span class="spec-title">变速箱</span>
+                            <span class="spec-value">9挡自动</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title pt-2 border-t border-gray-100">
+                    <span>主要配置</span>
+                </div>
+                
+                <div class="feature-row">
+                    <div class="feature-item">
+                        <i class="bi bi-check-circle-fill feature-check mr-1"></i>
+                        <span>全景天窗</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-check-circle-fill feature-check mr-1"></i>
+                        <span>真皮座椅</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-check-circle-fill feature-check mr-1"></i>
+                        <span>导航系统</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-check-circle-fill feature-check mr-1"></i>
+                        <span>自动驻车</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-check-circle-fill feature-check mr-1"></i>
+                        <span>倒车影像</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-check-circle-fill feature-check mr-1"></i>
+                        <span>车道偏离</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-check-circle-fill feature-check mr-1"></i>
+                        <span>定速巡航</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-check-circle-fill feature-check mr-1"></i>
+                        <span>座椅加热</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-check-circle-fill feature-check mr-1"></i>
+                        <span>自动泊车</span>
+                    </div>
+                </div>
+                
+                <button class="w-full mt-2 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm font-medium">
+                    查看全部配置
+                </button>
+            </div>
+        </div>
+
+        <!-- 车况检测 -->
+        <div class="mx-4">
+            <div class="vehicle-info-box">
+                <div class="section-title">
+                    <i class="bi bi-clipboard-check text-primary mr-1"></i>
+                    <span>车况检测</span>
+                    <div class="ml-auto text-xs text-accent">
+                        <i class="bi bi-shield-check mr-0.5"></i>
+                        <span>专业检测</span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <div class="vehicle-spec">
+                        <div class="spec-icon" style="color: #10b981;">
+                            <i class="bi bi-wrench"></i>
+                        </div>
+                        <div>
+                            <span class="spec-title">外观检测</span>
+                            <span class="spec-value text-green-600">正常</span>
+                        </div>
+                    </div>
+                    
+                    <div class="vehicle-spec">
+                        <div class="spec-icon" style="color: #10b981;">
+                            <i class="bi bi-car-front"></i>
+                        </div>
+                        <div>
+                            <span class="spec-title">内饰检测</span>
+                            <span class="spec-value text-green-600">正常</span>
+                        </div>
+                    </div>
+                    
+                    <div class="vehicle-spec">
+                        <div class="spec-icon" style="color: #f59e0b;">
+                            <i class="bi bi-gear"></i>
+                        </div>
+                        <div>
+                            <span class="spec-title">机械检测</span>
+                            <span class="spec-value text-amber-500">轻微异响</span>
+                        </div>
+                    </div>
+                    
+                    <div class="vehicle-spec">
+                        <div class="spec-icon" style="color: #10b981;">
+                            <i class="bi bi-lightning-charge"></i>
+                        </div>
+                        <div>
+                            <span class="spec-title">电气检测</span>
+                            <span class="spec-value text-green-600">正常</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-amber-50 p-3 rounded-lg">
+                    <div class="flex items-start">
+                        <i class="bi bi-exclamation-triangle text-amber-500 mr-2"></i>
+                        <div>
+                            <div class="text-sm text-gray-800 font-medium">检测备注</div>
+                            <div class="text-xs text-gray-600 mt-1">
+                                发动机正常运转，怠速略有异响，不影响正常使用。其余各项检测正常，车况良好。建议下一次保养时进行发动机调整。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="w-full mt-3 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm font-medium">
+                    查看完整检测报告
+                </button>
+            </div>
+        </div>
+
+        <!-- 同类推荐 -->
+        <div class="mx-4 mb-24">
+            <div class="vehicle-info-box">
+                <div class="section-title">
+                    <i class="bi bi-lightning-charge text-primary mr-1"></i>
+                    <span>同类推荐</span>
+                </div>
+                
+                <div class="similar-cars-container">
+                    <div class="similar-car">
+                        <img src="https://cdn.pixabay.com/photo/2019/03/08/08/56/bmw-4042172_1280.jpg" alt="宝马5系" class="similar-car-img">
+                        <div class="p-2">
+                            <div class="text-xs font-medium text-gray-800">宝马 5系</div>
+                            <div class="text-xs text-gray-500 mt-0.5">2018年 | 4.5万公里</div>
+                            <div class="text-sm font-bold text-secondary mt-1">¥29.8万</div>
+                        </div>
+                    </div>
+                    
+                    <div class="similar-car">
+                        <img src="https://cdn.pixabay.com/photo/2018/06/24/10/16/audi-3494183_1280.jpg" alt="奥迪A6L" class="similar-car-img">
+                        <div class="p-2">
+                            <div class="text-xs font-medium text-gray-800">奥迪 A6L</div>
+                            <div class="text-xs text-gray-500 mt-0.5">2019年 | 3.8万公里</div>
+                            <div class="text-sm font-bold text-secondary mt-1">¥31.5万</div>
+                        </div>
+                    </div>
+                    
+                    <div class="similar-car">
+                        <img src="https://cdn.pixabay.com/photo/2019/01/17/01/15/volvo-3937141_1280.jpg" alt="沃尔沃S90" class="similar-car-img">
+                        <div class="p-2">
+                            <div class="text-xs font-medium text-gray-800">沃尔沃 S90</div>
+                            <div class="text-xs text-gray-500 mt-0.5">2020年 | 2.2万公里</div>
+                            <div class="text-sm font-bold text-secondary mt-1">¥28.5万</div>
+                        </div>
+                    </div>
+                    
+                    <div class="similar-car">
+                        <img src="https://cdn.pixabay.com/photo/2018/09/24/16/14/cadillac-3699842_1280.jpg" alt="凯迪拉克CT5" class="similar-car-img">
+                        <div class="p-2">
+                            <div class="text-xs font-medium text-gray-800">凯迪拉克 CT5</div>
+                            <div class="text-xs text-gray-500 mt-0.5">2020年 | 2.8万公里</div>
+                            <div class="text-sm font-bold text-secondary mt-1">¥25.8万</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部按钮组 -->
+        <div class="bottom-actions">
+            <div class="grid grid-cols-3 gap-3 w-full">
+                <button class="action-button bg-white border border-gray-200">
+                    <i class="bi bi-chat-dots text-primary block mx-auto mb-1"></i>
+                    <span class="text-xs">在线咨询</span>
+                </button>
+                
+                <button class="action-button bg-white border border-gray-200">
+                    <i class="bi bi-telephone text-primary block mx-auto mb-1"></i>
+                    <span class="text-xs">电话咨询</span>
+                </button>
+                
+                <button class="action-button contact-seller">
+                    <i class="bi bi-calendar-check text-white block mx-auto mb-1"></i>
+                    <span class="text-xs">预约看车</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- AI助手浮动按钮 -->
+        <div class="ai-assistant-fab">
+            <i class="bi bi-robot"></i>
+        </div>
+    </div>
+
+    <script>
+        // 在文档加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 图片轮播功能
+            const carImages = [
+                "https://cdn.pixabay.com/photo/2017/03/27/14/56/auto-2179220_1280.jpg",
+                "https://cdn.pixabay.com/photo/2016/12/07/21/50/car-1890494_1280.jpg",
+                "https://cdn.pixabay.com/photo/2016/04/19/06/03/mercedes-1338063_1280.jpg",
+                "https://cdn.pixabay.com/photo/2017/06/29/09/12/car-2453605_1280.jpg",
+                "https://cdn.pixabay.com/photo/2019/07/18/17/19/auto-4346882_1280.jpg"
+            ];
+            
+            // 添加额外的样式以确保滚动条隐藏
+            const extraStyle = document.createElement('style');
+            extraStyle.textContent = `
+                * {
+                    scrollbar-width: none !important;
+                    -ms-overflow-style: none !important;
+                }
+                
+                *::-webkit-scrollbar {
+                    display: none !important;
+                    width: 0 !important;
+                    height: 0 !important;
+                }
+                
+                /* 确保在iframe中没有滚动条 */
+                .similar-cars-container {
+                    overflow-x: hidden !important;
+                }
+                
+                /* 按需显示卡片 */
+                @media (max-width: 340px) {
+                    .similar-car {
+                        width: 120px;
+                    }
+                }
+            `;
+            document.head.appendChild(extraStyle);
+            
+            // 检测是否在iframe中
+            if (window.self !== window.top) {
+                // 为body添加类，以便可以在CSS中特别处理
+                document.body.classList.add('in-iframe');
+                
+                // 特别处理同类推荐容器
+                const similarCarsContainer = document.querySelector('.similar-cars-container');
+                if (similarCarsContainer) {
+                    similarCarsContainer.style.overflowX = 'hidden';
+                    // 限制显示数量
+                    const similarCars = similarCarsContainer.querySelectorAll('.similar-car');
+                    if (similarCars.length > 3) {
+                        for (let i = 3; i < similarCars.length; i++) {
+                            similarCars[i].style.display = 'none';
+                        }
+                    }
+                }
+            }
+            
+            let currentImageIndex = 0;
+            const mainCarImage = document.getElementById('mainCarImage');
+            const currentImageIndexEl = document.getElementById('currentImageIndex');
+            const paginationBullets = document.querySelectorAll('.swiper-pagination-bullet');
+            
+            // 切换图片函数
+            window.changeImage = function(direction) {
+                currentImageIndex = (currentImageIndex + direction + carImages.length) % carImages.length;
+                updateImage();
+            };
+            
+            // 直接设置图片索引
+            window.setImage = function(index) {
+                currentImageIndex = index;
+                updateImage();
+            };
+            
+            // 更新图片和指示器
+            function updateImage() {
+                mainCarImage.classList.remove('fade-in');
+                setTimeout(() => {
+                    mainCarImage.src = carImages[currentImageIndex];
+                    mainCarImage.classList.add('fade-in');
+                    currentImageIndexEl.textContent = currentImageIndex + 1;
+                    
+                    // 更新分页指示器
+                    paginationBullets.forEach((bullet, index) => {
+                        if (index === currentImageIndex) {
+                            bullet.classList.add('swiper-pagination-bullet-active');
+                        } else {
+                            bullet.classList.remove('swiper-pagination-bullet-active');
+                        }
+                    });
+                }, 10);
+            }
+            
+            // 自动轮播
+            let autoPlayInterval = setInterval(() => {
+                changeImage(1);
+            }, 5000);
+            
+            // 鼠标悬停时暂停自动轮播
+            document.querySelector('.vehicle-swiper').addEventListener('mouseenter', () => {
+                clearInterval(autoPlayInterval);
+            });
+            
+            // 鼠标离开时恢复自动轮播
+            document.querySelector('.vehicle-swiper').addEventListener('mouseleave', () => {
+                autoPlayInterval = setInterval(() => {
+                    changeImage(1);
+                }, 5000);
+            });
+            
+            // 收藏按钮交互
+            const favoriteButton = document.querySelector('.favorite-button');
+            favoriteButton.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('bi-heart')) {
+                    icon.classList.remove('bi-heart');
+                    icon.classList.add('bi-heart-fill');
+                    icon.style.color = '#e53e3e';
+                } else {
+                    icon.classList.remove('bi-heart-fill');
+                    icon.classList.add('bi-heart');
+                    icon.style.color = '';
+                }
+            });
+            
+            // 底部按钮动效
+            const actionButtons = document.querySelectorAll('.action-button');
+            actionButtons.forEach(button => {
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.96)';
+                });
+                
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+
+            // 查看全部配置按钮交互
+            const viewAllConfigBtn = document.querySelector('.vehicle-info-box button');
+            if (viewAllConfigBtn) {
+                viewAllConfigBtn.addEventListener('click', function() {
+                    const moreFeatures = document.createElement('div');
+                    moreFeatures.className = 'feature-row mt-3';
+                    moreFeatures.innerHTML = `
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-check mr-1"></i>
+                            <span>电动尾门</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-check mr-1"></i>
+                            <span>无钥匙进入</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-check mr-1"></i>
+                            <span>自动头灯</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-check mr-1"></i>
+                            <span>电动座椅</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-check mr-1"></i>
+                            <span>前雷达</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-check mr-1"></i>
+                            <span>胎压监测</span>
+                        </div>
+                    `;
+                    
+                    this.parentNode.insertBefore(moreFeatures, this);
+                    this.textContent = '收起配置';
+                    this.setAttribute('data-expanded', 'true');
+                    
+                    // 切换按钮功能
+                    this.removeEventListener('click', arguments.callee);
+                    this.addEventListener('click', function() {
+                        if (this.getAttribute('data-expanded') === 'true') {
+                            moreFeatures.style.display = 'none';
+                            this.textContent = '查看全部配置';
+                            this.setAttribute('data-expanded', 'false');
+                        } else {
+                            moreFeatures.style.display = 'flex';
+                            this.textContent = '收起配置';
+                            this.setAttribute('data-expanded', 'true');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

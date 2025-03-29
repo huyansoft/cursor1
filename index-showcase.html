@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二手车销售管理系统 - 页面展示</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        :root {
+            --primary-color: #1e293b;
+            --secondary-color: #f77055;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f8fafc;
+            line-height: 1.4;
+            color: #1e293b;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #3a5998 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        @media (min-width: 768px) {
+            .grid-layout {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .grid-layout {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            }
+        }
+        
+        .device-frame {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            border: 10px solid var(--primary-color);
+            width: 100%;
+            height: 600px;
+            position: relative;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .device-frame:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .device-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30%;
+            height: 20px;
+            background-color: var(--primary-color);
+            border-radius: 0 0 1rem 1rem;
+            z-index: 10;
+        }
+        
+        .device-iframe {
+            border: none;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            position: relative;
+            z-index: 5;
+        }
+        
+        /* 加载指示器 */
+        .loading-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid var(--secondary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            z-index: 3;
+        }
+        
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        .page-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .page-description {
+            font-size: 0.85rem;
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+            color: var(--primary-color);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            width: 50px;
+            height: 4px;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+        }
+        
+        .btn-view {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+        
+        .btn-view:hover {
+            background-color: #e05e48;
+            transform: translateY(-2px);
+        }
+        
+        .device-container {
+            margin-bottom: 3rem;
+        }
+        
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .back-to-home {
+            display: inline-block;
+            background-color: white;
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: all 0.2s ease;
+        }
+        
+        .back-to-home:hover {
+            background-color: #f3f4f6;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <header class="page-header">
+        <div class="container">
+            <h1 class="text-4xl font-bold mb-2">二手车销售管理系统</h1>
+            <p class="text-xl">完整页面展示</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section>
+            <h2 class="section-title">主要页面</h2>
+            
+            <div class="grid-layout">
+                <!-- 首页 -->
+                <div class="device-container">
+                    <h3 class="page-title">首页</h3>
+                    <p class="page-description">销售概览、热门车型、业绩追踪</p>
+                    <div class="device-frame">
+                        <iframe src="pages/dashboard.html" class="device-iframe" onload="this.style.opacity='1'"></iframe>
+                        <div class="loading-indicator"></div>
+                    </div>
+                    <a href="pages/dashboard.html" target="_blank" class="btn-view w-full">查看全屏</a>
+                </div>
+                
+                <!-- 线索管理 -->
+                <div class="device-container">
+                    <h3 class="page-title">线索管理</h3>
+                    <p class="page-description">线索分级、跟进提醒、转化追踪</p>
+                    <div class="device-frame">
+                        <iframe src="pages/leads.html" class="device-iframe" onload="this.style.opacity='1'"></iframe>
+                        <div class="loading-indicator"></div>
+                    </div>
+                    <a href="pages/leads.html" target="_blank" class="btn-view w-full">查看全屏</a>
+                </div>
+                
+                <!-- 客户管理 -->
+                <div class="device-container">
+                    <h3 class="page-title">客户管理</h3>
+                    <p class="page-description">客户列表、详细档案、跟进记录</p>
+                    <div class="device-frame">
+                        <iframe src="pages/customers.html" class="device-iframe" onload="this.style.opacity='1'"></iframe>
+                        <div class="loading-indicator"></div>
+                    </div>
+                    <a href="pages/customers.html" target="_blank" class="btn-view w-full">查看全屏</a>
+                </div>
+                
+                <!-- 数据分析 -->
+                <div class="device-container">
+                    <h3 class="page-title">数据分析</h3>
+                    <p class="page-description">市场行情、定价分析、趋势预测</p>
+                    <div class="device-frame">
+                        <iframe src="pages/analytics.html" class="device-iframe" onload="this.style.opacity='1'"></iframe>
+                        <div class="loading-indicator"></div>
+                    </div>
+                    <a href="pages/analytics.html" target="_blank" class="btn-view w-full">查看全屏</a>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <h2 class="section-title">辅助功能页面</h2>
+            
+            <div class="grid-layout">
+                <!-- AI助手 -->
+                <div class="device-container">
+                    <h3 class="page-title">AI助手</h3>
+                    <p class="page-description">智能问答、话术生成、定价建议</p>
+                    <div class="device-frame">
+                        <iframe src="pages/ai-assistant.html" class="device-iframe" onload="this.style.opacity='1'"></iframe>
+                        <div class="loading-indicator"></div>
+                    </div>
+                    <a href="pages/ai-assistant.html" target="_blank" class="btn-view w-full">查看全屏</a>
+                </div>
+                
+                <!-- 个人中心 -->
+                <div class="device-container">
+                    <h3 class="page-title">个人中心</h3>
+                    <p class="page-description">个人资料、业绩统计、系统设置</p>
+                    <div class="device-frame">
+                        <iframe src="pages/profile.html" class="device-iframe" onload="this.style.opacity='1'"></iframe>
+                        <div class="loading-indicator"></div>
+                    </div>
+                    <a href="pages/profile.html" target="_blank" class="btn-view w-full">查看全屏</a>
+                </div>
+                
+                <!-- 销售数据 -->
+                <div class="device-container">
+                    <h3 class="page-title">销售数据</h3>
+                    <p class="page-description">销售业绩、成交记录、客户转化</p>
+                    <div class="device-frame">
+                        <iframe src="pages/sales-data.html" class="device-iframe" onload="this.style.opacity='1'"></iframe>
+                        <div class="loading-indicator"></div>
+                    </div>
+                    <a href="pages/sales-data.html" target="_blank" class="btn-view w-full">查看全屏</a>
+                </div>
+                
+                <!-- 车辆详情 -->
+                <div class="device-container">
+                    <h3 class="page-title">车辆详情</h3>
+                    <p class="page-description">车辆信息、配置参数、价格分析</p>
+                    <div class="device-frame">
+                        <iframe src="pages/vehicle-detail.html" class="device-iframe" onload="this.style.opacity='1'"></iframe>
+                        <div class="loading-indicator"></div>
+                    </div>
+                    <a href="pages/vehicle-detail.html" target="_blank" class="btn-view w-full">查看全屏</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>二手车销售管理系统 - 高保真原型展示</p>
+            <a href="index.html" class="back-to-home">返回首页</a>
+        </div>
+    </footer>
+    
+    <script>
+        // 处理iframe加载
+        document.addEventListener('DOMContentLoaded', function() {
+            const iframes = document.querySelectorAll('.device-iframe');
+            
+            // 为每个iframe设置加载事件
+            iframes.forEach(iframe => {
+                iframe.onload = function() {
+                    // 显示iframe内容
+                    this.style.opacity = '1';
+                    
+                    // 隐藏加载指示器
+                    const loadingIndicator = this.parentElement.querySelector('.loading-indicator');
+                    if (loadingIndicator) {
+                        loadingIndicator.style.display = 'none';
+                    }
+                    
+                    // iframe内容注入CSS修复
+                    try {
+                        const iframeDoc = this.contentDocument || this.contentWindow.document;
+                        const style = iframeDoc.createElement('style');
+                        
+                        style.textContent = `
+                            html, body {
+                                height: 100% !important;
+                                width: 100% !important;
+                                margin: 0 !important;
+                                padding: 0 !important;
+                                overflow-x: hidden !important;
+                            }
+                            
+                            ::-webkit-scrollbar {
+                                width: 0 !important;
+                                height: 0 !important;
+                                display: none !important;
+                            }
+                            
+                            * {
+                                -ms-overflow-style: none !important;
+                                scrollbar-width: none !important;
+                            }
+                        `;
+                        
+                        iframeDoc.head.appendChild(style);
+                    } catch (e) {
+                        console.error('无法修改iframe内容:', e);
+                    }
+                };
+                
+                // 添加错误处理
+                iframe.onerror = function() {
+                    console.error('无法加载iframe:', this.src);
+                    
+                    // 显示错误消息
+                    const loadingIndicator = this.parentElement.querySelector('.loading-indicator');
+                    if (loadingIndicator) {
+                        loadingIndicator.style.borderColor = '#ef4444';
+                        loadingIndicator.style.borderTop = '3px solid #ef4444';
+                        loadingIndicator.style.animation = 'none';
+                    }
+                    
+                    // 在3秒后重试
+                    setTimeout(() => {
+                        const cacheBuster = '?t=' + new Date().getTime();
+                        this.src = this.src.split('?')[0] + cacheBuster;
+                    }, 3000);
+                };
+                
+                // 设置超时处理
+                setTimeout(() => {
+                    if (iframe.style.opacity !== '1') {
+                        // 重新加载
+                        const cacheBuster = '?t=' + new Date().getTime();
+                        iframe.src = iframe.src.split('?')[0] + cacheBuster;
+                    }
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html> 

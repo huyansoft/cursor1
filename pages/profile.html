@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的 - 二手车销售管理系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/preview-fix.css" id="preview-fix-css">
+    <style>
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #3a5998 100%);
+            color: white;
+            padding: 1.5rem 1rem;
+            position: relative;
+            margin-bottom: 4rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .profile-avatar {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: -2.5rem;
+            overflow: hidden;
+            background-color: white;
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-info-card {
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            padding: 3rem 1rem 1rem;
+            margin: 0 1rem 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .profile-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .profile-role {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+        
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 0.85rem 1rem;
+            background-color: white;
+            margin-bottom: 0.75rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+        
+        .menu-item:hover {
+            transform: translateX(3px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .menu-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        
+        .menu-content {
+            flex: 1;
+        }
+        
+        .menu-title {
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .menu-description {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .menu-arrow {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .icon-orange {
+            background-color: rgba(247, 112, 85, 0.1);
+            color: var(--secondary-color);
+        }
+        
+        .icon-blue {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+        
+        .icon-amber {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+        
+        .icon-green {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+        
+        .icon-indigo {
+            background-color: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+        
+        .icon-purple {
+            background-color: rgba(139, 92, 246, 0.1);
+            color: #8b5cf6;
+        }
+        
+        .icon-red {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        
+        .progress-circle {
+            position: relative;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            background-color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+        }
+        
+        .progress-circle::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--secondary-color) 0% calc(var(--progress) * 1%),
+                transparent calc(var(--progress) * 1%) 100%
+            );
+            -webkit-mask: radial-gradient(
+                transparent 55%,
+                black 56%,
+                black 70%,
+                transparent 71%
+            );
+            mask: radial-gradient(
+                transparent 55%,
+                black 56%,
+                black 70%,
+                transparent 71%
+            );
+        }
+        
+        .commission-card {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            margin: 0.75rem 1rem;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .commission-header {
+            background: linear-gradient(135deg, #3a5998 0%, var(--primary-color) 100%);
+            color: white;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        
+        .commission-body {
+            padding: 0.75rem 1rem;
+        }
+        
+        .commission-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .commission-row:last-child {
+            border-bottom: none;
+        }
+        
+        .commission-date {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .commission-amount {
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        
+        .sign-out-button {
+            margin: 1.5rem 1rem;
+            padding: 0.75rem;
+            background-color: #f9fafb;
+            color: #ef4444;
+            text-align: center;
+            border-radius: var(--border-radius-lg);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="app-container">
+        <!-- 个人资料头部 -->
+        <div class="profile-header">
+            <div class="flex justify-between items-center mb-1">
+                <h1 class="text-lg font-bold">个人中心</h1>
+                <div class="flex">
+                    <a href="#" class="text-white mr-4"><i class="bi bi-gear text-lg"></i></a>
+                    <div class="relative">
+                        <i class="bi bi-bell text-lg"></i>
+                        <span class="absolute -top-1 -right-1 bg-secondary text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">3</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-avatar">
+                <img src="../assets/images/real-avatar.jpg" alt="用户头像">
+            </div>
+        </div>
+        
+        <!-- 个人资料卡片 -->
+        <div class="profile-info-card">
+            <div class="profile-name">张伟</div>
+            <div class="profile-role">高级销售顾问 | 销冠</div>
+            <div class="flex justify-center mt-2">
+                <div class="badge-primary bg-secondary text-white text-xs px-2 py-0.5 rounded-full mr-1">销量领先</div>
+                <div class="badge-primary bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full">VIP顾问</div>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">本月成交</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">¥132.8万</div>
+                    <div class="stat-label">销售额</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">88.5%</div>
+                    <div class="stat-label">目标完成</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 业绩目标 -->
+        <div class="flex items-center justify-between px-4 mt-4 mb-2">
+            <h2 class="text-sm font-semibold text-gray-700">本月业绩目标</h2>
+            <span class="text-xs text-secondary">21/31天</span>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-3 px-4 mb-4">
+            <div class="bg-white rounded-lg p-3 text-center flex flex-col items-center justify-center shadow-sm">
+                <div class="progress-circle" style="--progress: 88">
+                    <span class="text-sm font-semibold">88.5%</span>
+                </div>
+                <div class="text-xs text-gray-500">总体完成</div>
+            </div>
+            <div class="bg-white rounded-lg p-3 text-center flex flex-col items-center justify-center shadow-sm">
+                <div class="progress-circle" style="--progress: 60">
+                    <span class="text-sm font-semibold">60%</span>
+                </div>
+                <div class="text-xs text-gray-500">销售台数</div>
+            </div>
+            <div class="bg-white rounded-lg p-3 text-center flex flex-col items-center justify-center shadow-sm">
+                <div class="progress-circle" style="--progress: 85">
+                    <span class="text-sm font-semibold">85%</span>
+                </div>
+                <div class="text-xs text-gray-500">新增客户</div>
+            </div>
+        </div>
+        
+        <!-- 本月提成 -->
+        <div class="commission-card">
+            <div class="commission-header">本月销售提成预估</div>
+            <div class="commission-body">
+                <div class="commission-row">
+                    <div class="commission-date">8月20日</div>
+                    <div class="commission-amount">+¥12,500</div>
+                </div>
+                <div class="commission-row">
+                    <div class="commission-date">8月15日</div>
+                    <div class="commission-amount">+¥8,300</div>
+                </div>
+                <div class="commission-row">
+                    <div class="commission-date">8月10日</div>
+                    <div class="commission-amount">+¥15,200</div>
+                </div>
+                <div class="commission-row">
+                    <div class="commission-date">8月05日</div>
+                    <div class="commission-amount">+¥7,800</div>
+                </div>
+                <div class="flex justify-between items-center mt-2 pt-2 border-t border-dashed border-gray-200">
+                    <div class="text-sm font-medium">本月累计</div>
+                    <div class="text-lg font-semibold text-secondary">¥43,800</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 功能菜单 -->
+        <div class="px-4 mt-4 mb-2">
+            <h2 class="text-sm font-semibold text-gray-700">常用功能</h2>
+        </div>
+        
+        <div class="px-4 mb-4">
+            <div class="menu-item">
+                <div class="menu-icon icon-orange">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+                <div class="menu-content">
+                    <div class="menu-title">我的绩效</div>
+                    <div class="menu-description">查看个人业绩报表和奖金情况</div>
+                </div>
+                <div class="menu-arrow">
+                    <i class="bi bi-chevron-right"></i>
+                </div>
+            </div>
+            
+            <div class="menu-item">
+                <div class="menu-icon icon-blue">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
+                <div class="menu-content">
+                    <div class="menu-title">我的客户</div>
+                    <div class="menu-description">管理所有客户和跟进计划</div>
+                </div>
+                <div class="menu-arrow">
+                    <i class="bi bi-chevron-right"></i>
+                </div>
+            </div>
+            
+            <div class="menu-item">
+                <div class="menu-icon icon-amber">
+                    <i class="bi bi-clipboard-data"></i>
+                </div>
+                <div class="menu-content">
+                    <div class="menu-title">业绩目标</div>
+                    <div class="menu-description">设置和追踪您的销售目标</div>
+                </div>
+                <div class="menu-arrow">
+                    <i class="bi bi-chevron-right"></i>
+                </div>
+            </div>
+            
+            <div class="menu-item">
+                <div class="menu-icon icon-green">
+                    <i class="bi bi-building"></i>
+                </div>
+                <div class="menu-content">
+                    <div class="menu-title">车辆库存</div>
+                    <div class="menu-description">查看所有可售车辆信息</div>
+                </div>
+                <div class="menu-arrow">
+                    <i class="bi bi-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="px-4 mt-4 mb-2">
+            <h2 class="text-sm font-semibold text-gray-700">系统与帮助</h2>
+        </div>
+        
+        <div class="px-4 mb-5">
+            <div class="menu-item">
+                <div class="menu-icon icon-indigo">
+                    <i class="bi bi-person-fill-gear"></i>
+                </div>
+                <div class="menu-content">
+                    <div class="menu-title">账号设置</div>
+                    <div class="menu-description">修改个人信息和密码</div>
+                </div>
+                <div class="menu-arrow">
+                    <i class="bi bi-chevron-right"></i>
+                </div>
+            </div>
+            
+            <div class="menu-item">
+                <div class="menu-icon icon-purple">
+                    <i class="bi bi-question-circle"></i>
+                </div>
+                <div class="menu-content">
+                    <div class="menu-title">帮助中心</div>
+                    <div class="menu-description">获取使用指南和帮助</div>
+                </div>
+                <div class="menu-arrow">
+                    <i class="bi bi-chevron-right"></i>
+                </div>
+            </div>
+            
+            <div class="menu-item">
+                <div class="menu-icon icon-red">
+                    <i class="bi bi-box-arrow-right"></i>
+                </div>
+                <div class="menu-content">
+                    <div class="menu-title">退出登录</div>
+                    <div class="menu-description">安全退出当前账号</div>
+                </div>
+                <div class="menu-arrow">
+                    <i class="bi bi-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+            <a href="dashboard.html" class="bottom-nav-item">
+                <i class="bi bi-house-door"></i>
+                <span>首页</span>
+            </a>
+            <a href="leads.html" class="bottom-nav-item">
+                <i class="bi bi-funnel"></i>
+                <span>线索</span>
+            </a>
+            <a href="customers.html" class="bottom-nav-item">
+                <i class="bi bi-people"></i>
+                <span>客户</span>
+            </a>
+            <a href="analytics.html" class="bottom-nav-item">
+                <i class="bi bi-bar-chart"></i>
+                <span>数据</span>
+            </a>
+            <a href="profile.html" class="bottom-nav-item active">
+                <i class="bi bi-person-fill"></i>
+                <span>我的</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html> 

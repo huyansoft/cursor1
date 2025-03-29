@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知识库 - 二手车销售管理系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/page-styles.css">
+    <style>
+        .article-card {
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .article-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-tag {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        
+        .search-box {
+            border-radius: 1rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="app-container min-h-screen flex flex-col">
+        <!-- 顶部导航 -->
+        <header class="header-profile pb-4">
+            <div class="flex justify-between items-center px-4 py-3">
+                <h1 class="text-xl font-semibold text-white">知识库</h1>
+                <div class="flex items-center space-x-3">
+                    <button class="text-white focus:outline-none">
+                        <i class="bi bi-star text-xl"></i>
+                    </button>
+                    <button class="text-white focus:outline-none">
+                        <i class="bi bi-plus-circle text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 搜索框 -->
+            <div class="px-4 pb-2">
+                <div class="search-box bg-white bg-opacity-90 flex items-center px-3 py-2">
+                    <i class="bi bi-search text-gray-400"></i>
+                    <input type="text" placeholder="搜索车型、政策或销售技巧..." class="w-full ml-2 bg-transparent border-none focus:outline-none text-sm">
+                </div>
+            </div>
+        </header>
+
+        <!-- 分类导航 -->
+        <div class="px-4 -mt-4 mb-4">
+            <div class="bg-white rounded-lg shadow-sm p-2">
+                <div class="flex overflow-x-auto py-1 space-x-2">
+                    <button class="category-tag bg-primary text-white whitespace-nowrap">
+                        全部
+                    </button>
+                    <button class="category-tag bg-primary bg-opacity-10 text-primary whitespace-nowrap">
+                        产品知识
+                    </button>
+                    <button class="category-tag bg-primary bg-opacity-10 text-primary whitespace-nowrap">
+                        销售技巧
+                    </button>
+                    <button class="category-tag bg-primary bg-opacity-10 text-primary whitespace-nowrap">
+                        政策法规
+                    </button>
+                    <button class="category-tag bg-primary bg-opacity-10 text-primary whitespace-nowrap">
+                        流程指南
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <main class="flex-grow pb-16 px-4">
+            <div class="space-y-4">
+                <!-- 精选内容 -->
+                <div class="flex justify-between items-center">
+                    <h3 class="font-semibold text-gray-800">精选内容</h3>
+                    <button class="text-primary text-sm">
+                        更多 <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
+                
+                <!-- 文章卡片 -->
+                <div class="article-card bg-white shadow-sm">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="w-full h-32 object-cover rounded-t-xl" alt="汽车评估标准">
+                        <span class="category-tag bg-primary text-white absolute top-2 left-2">产品知识</span>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="font-semibold text-gray-800">二手车估价全面指南：如何准确评估车辆价值</h4>
+                        <p class="text-sm text-gray-500 mt-1 line-clamp-2">掌握专业估价技巧，从车况、市场行情、车型保值率等多维度进行精准评估，提高成交效率。</p>
+                        <div class="flex justify-between items-center mt-3">
+                            <div class="flex items-center text-xs text-gray-500">
+                                <i class="bi bi-eye mr-1"></i>
+                                <span>1,280</span>
+                                <i class="bi bi-hand-thumbs-up ml-3 mr-1"></i>
+                                <span>342</span>
+                            </div>
+                            <span class="text-xs text-gray-500">3天前更新</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="article-card bg-white shadow-sm">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="w-full h-32 object-cover rounded-t-xl" alt="销售技巧">
+                        <span class="category-tag bg-secondary text-white absolute top-2 left-2">销售技巧</span>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="font-semibold text-gray-800">高级销售话术：如何应对客户常见疑虑和异议</h4>
+                        <p class="text-sm text-gray-500 mt-1 line-clamp-2">本文总结了二手车销售中常见的客户顾虑，并提供了有效的沟通策略和解决方案，提高成交率。</p>
+                        <div class="flex justify-between items-center mt-3">
+                            <div class="flex items-center text-xs text-gray-500">
+                                <i class="bi bi-eye mr-1"></i>
+                                <span>3,452</span>
+                                <i class="bi bi-hand-thumbs-up ml-3 mr-1"></i>
+                                <span>876</span>
+                            </div>
+                            <span class="text-xs text-gray-500">1周前更新</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 热门话题 -->
+                <div class="mt-6">
+                    <h3 class="font-semibold text-gray-800 mb-3">热门话题</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-white rounded-xl p-3 shadow-sm">
+                            <div class="flex items-center mb-2">
+                                <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mr-2">
+                                    <i class="bi bi-book text-red-500"></i>
+                                </div>
+                                <h4 class="text-sm font-semibold">新能源车保值率</h4>
+                            </div>
+                            <p class="text-xs text-gray-500">28个相关文章</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl p-3 shadow-sm">
+                            <div class="flex items-center mb-2">
+                                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                                    <i class="bi bi-clipboard-check text-blue-500"></i>
+                                </div>
+                                <h4 class="text-sm font-semibold">车况检测标准</h4>
+                            </div>
+                            <p class="text-xs text-gray-500">42个相关文章</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl p-3 shadow-sm">
+                            <div class="flex items-center mb-2">
+                                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-2">
+                                    <i class="bi bi-cash-stack text-green-500"></i>
+                                </div>
+                                <h4 class="text-sm font-semibold">金融方案设计</h4>
+                            </div>
+                            <p class="text-xs text-gray-500">19个相关文章</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl p-3 shadow-sm">
+                            <div class="flex items-center mb-2">
+                                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-2">
+                                    <i class="bi bi-card-checklist text-purple-500"></i>
+                                </div>
+                                <h4 class="text-sm font-semibold">过户流程指南</h4>
+                            </div>
+                            <p class="text-xs text-gray-500">35个相关文章</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- AI学习助手 -->
+                <div class="ai-card">
+                    <div class="flex items-start">
+                        <div class="ai-icon">
+                            <i class="bi bi-mortarboard"></i>
+                        </div>
+                        <div class="ai-content">
+                            <h3 class="ai-title">AI学习助手</h3>
+                            <p class="ai-text">根据您的浏览历史，为您推荐以下学习内容：</p>
+                            <ul class="mt-2 text-sm text-gray-700 space-y-1">
+                                <li class="flex items-start">
+                                    <i class="bi bi-file-earmark-text text-primary mr-1 mt-0.5"></i>
+                                    <span>《豪华车型客户心理分析与沟通指南》</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="bi bi-file-earmark-text text-primary mr-1 mt-0.5"></i>
+                                    <span>《二手车置换业务详解与案例分析》</span>
+                                </li>
+                            </ul>
+                            <button class="mt-3 text-primary text-sm font-medium flex items-center">
+                                开始学习 <i class="bi bi-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 底部导航 -->
+        <nav class="bottom-nav bg-white border-t border-gray-200 fixed bottom-0 left-0 right-0">
+            <div class="flex justify-around items-center">
+                <a href="dashboard.html" class="flex flex-col items-center py-2 px-3 text-gray-500">
+                    <i class="bi bi-house-door text-xl"></i>
+                    <span class="text-xs mt-1">首页</span>
+                </a>
+                <a href="leads.html" class="flex flex-col items-center py-2 px-3 text-gray-500">
+                    <i class="bi bi-funnel text-xl"></i>
+                    <span class="text-xs mt-1">线索</span>
+                </a>
+                <a href="customers.html" class="flex flex-col items-center py-2 px-3 text-gray-500">
+                    <i class="bi bi-people text-xl"></i>
+                    <span class="text-xs mt-1">客户</span>
+                </a>
+                <a href="analytics.html" class="flex flex-col items-center py-2 px-3 text-gray-500">
+                    <i class="bi bi-bar-chart text-xl"></i>
+                    <span class="text-xs mt-1">数据</span>
+                </a>
+                <a href="profile.html" class="flex flex-col items-center py-2 px-3 text-primary">
+                    <i class="bi bi-person text-xl"></i>
+                    <span class="text-xs mt-1">我的</span>
+                </a>
+            </div>
+        </nav>
+        
+        <!-- AI助手悬浮按钮 -->
+        <div class="ai-assistant-fab fixed right-4 bottom-20">
+            <button class="w-12 h-12 bg-secondary rounded-full shadow-lg flex items-center justify-center text-white">
+                <i class="bi bi-robot text-2xl"></i>
+            </button>
+        </div>
+    </div>
+</body>
+</html> 

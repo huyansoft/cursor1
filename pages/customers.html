@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户管理 - 二手车销售管理系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/preview-fix.css" id="preview-fix-css">
+    <style>
+        .page-header {
+            background-color: var(--primary-color);
+            background-image: url('../assets/images/bg-customers.jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            color: white;
+            padding: 1rem 0.75rem;
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 10;
+        }
+        
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(30,41,59,0.85), rgba(30,41,59,0.95));
+            z-index: -1;
+        }
+        
+        .customer-card {
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .customer-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .customer-card .card-header {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .customer-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+            background-color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+        }
+        
+        .customer-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .customer-info {
+            flex: 1;
+        }
+        
+        .stage-badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.65rem;
+            font-weight: 500;
+        }
+        
+        .stage-inquiry {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+        
+        .stage-negotiation {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+        
+        .stage-decision {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+        
+        .stage-purchase {
+            background-color: rgba(139, 92, 246, 0.1);
+            color: #8b5cf6;
+        }
+        
+        .customer-card .card-body {
+            padding: 0.75rem;
+        }
+        
+        .customer-meta {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 0.25rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .customer-meta span {
+            margin-right: 0.75rem;
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.25rem;
+        }
+        
+        .customer-meta i {
+            margin-right: 0.25rem;
+            font-size: 0.8rem;
+        }
+        
+        .customer-card .card-footer {
+            padding: 0.5rem 0.75rem;
+            background-color: #f9fafb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .action-buttons {
+            display: flex;
+        }
+        
+        .action-button {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 0.5rem;
+            background-color: white;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+        
+        .action-button:hover, .action-button:active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .tabs {
+            display: flex;
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 0.75rem;
+        }
+        
+        .tab {
+            flex: 1;
+            font-size: 0.75rem;
+            padding: 0.5rem 0;
+            text-align: center;
+            position: relative;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+        }
+        
+        .tab.active {
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 2px;
+            background-color: var(--secondary-color);
+            border-radius: 2px 2px 0 0;
+        }
+        
+        .search-bar {
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 0.5rem;
+        }
+        
+        .search-bar input {
+            font-size: 0.75rem;
+            padding: 0.35rem 0.5rem;
+        }
+        
+        .search-bar i {
+            font-size: 0.85rem;
+        }
+        
+        .add-button {
+            position: fixed;
+            right: 1rem;
+            bottom: 4.5rem;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 0 3px 10px rgba(247, 112, 85, 0.3);
+            z-index: 100;
+            transition: all 0.2s ease;
+        }
+        
+        .add-button:active {
+            transform: scale(0.95);
+        }
+        
+        .intent-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+        }
+        
+        .intent-high {
+            background-color: #ef4444;
+        }
+        
+        .intent-medium {
+            background-color: #f59e0b;
+        }
+        
+        .intent-low {
+            background-color: #10b981;
+        }
+        
+        .wave-container {
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            overflow: hidden;
+        }
+        
+        .wave {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' style='fill: rgba(255, 255, 255, 0.15);'/%3E%3C/svg%3E");
+            background-repeat: repeat-x;
+            animation: wave 15s linear infinite;
+        }
+        
+        @keyframes wave {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        
+        /* 添加动画效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .customer-card {
+            animation: fadeInUp 0.3s ease forwards;
+            opacity: 0;
+        }
+        
+        .customer-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+        
+        .customer-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .customer-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+        
+        .customer-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="app-container">
+        <!-- 页面头部 -->
+        <div class="page-header">
+            <div class="flex items-center">
+                <a href="dashboard.html" class="back-button mr-2">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <h1 class="text-lg font-semibold">客户管理</h1>
+            </div>
+            
+            <div class="wave-container">
+                <div class="wave"></div>
+            </div>
+        </div>
+        
+        <!-- 搜索栏移动到这里 -->
+        <div class="px-4 pt-2 pb-1">
+            <div class="search-bar">
+                <i class="bi bi-search"></i>
+                <input type="text" placeholder="搜索客户名、电话或意向车型..." />
+            </div>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="p-4 pt-2 pb-20">
+            <!-- 分类标签 -->
+            <div class="tabs">
+                <div class="tab active">全部</div>
+                <div class="tab">咨询期</div>
+                <div class="tab">洽谈期</div>
+                <div class="tab">决策期</div>
+                <div class="tab">已成交</div>
+            </div>
+            
+            <!-- 客户卡片 -->
+            <div class="customer-card">
+                <div class="card-header">
+                    <div class="flex items-center">
+                        <div class="customer-avatar">
+                            <img src="../assets/images/avatar1.jpg" alt="客户头像">
+                        </div>
+                        <div class="customer-info">
+                            <div class="flex items-center">
+                                <span class="font-medium text-sm">张先生</span>
+                                <div class="intent-icon intent-high ml-2">高</div>
+                            </div>
+                            <div class="text-xs text-gray-500">138****5678</div>
+                        </div>
+                    </div>
+                    <span class="stage-badge stage-negotiation">洽谈期</span>
+                </div>
+                <div class="card-body">
+                    <div class="text-sm font-medium">意向：奔驰E级 2020款 2.0T</div>
+                    <div class="customer-meta">
+                        <span><i class="bi bi-calendar-check"></i>最近跟进：昨天</span>
+                        <span><i class="bi bi-wallet2"></i>预算：30-40万</span>
+                        <span><i class="bi bi-person-badge"></i>来源：展厅咨询</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="text-xs text-gray-500">下次联系：明天 14:30</div>
+                    <div class="action-buttons">
+                        <a href="tel:13812345678" class="action-button">
+                            <i class="bi bi-telephone"></i>
+                        </a>
+                        <a href="#" class="action-button">
+                            <i class="bi bi-chat-dots"></i>
+                        </a>
+                        <a href="#" class="action-button">
+                            <i class="bi bi-three-dots"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="customer-card">
+                <div class="card-header">
+                    <div class="flex items-center">
+                        <div class="customer-avatar">
+                            <img src="../assets/images/avatar2.jpg" alt="客户头像">
+                        </div>
+                        <div class="customer-info">
+                            <div class="flex items-center">
+                                <span class="font-medium text-sm">王女士</span>
+                                <div class="intent-icon intent-medium ml-2">中</div>
+                            </div>
+                            <div class="text-xs text-gray-500">139****1234</div>
+                        </div>
+                    </div>
+                    <span class="stage-badge stage-decision">决策期</span>
+                </div>
+                <div class="card-body">
+                    <div class="text-sm font-medium">意向：宝马5系 2021款 2.0T</div>
+                    <div class="customer-meta">
+                        <span><i class="bi bi-calendar-check"></i>最近跟进：今天</span>
+                        <span><i class="bi bi-wallet2"></i>预算：40-50万</span>
+                        <span><i class="bi bi-person-badge"></i>来源：线上询价</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="text-xs text-gray-500">已试驾，考虑首付比例</div>
+                    <div class="action-buttons">
+                        <a href="tel:13912345678" class="action-button">
+                            <i class="bi bi-telephone"></i>
+                        </a>
+                        <a href="#" class="action-button">
+                            <i class="bi bi-chat-dots"></i>
+                        </a>
+                        <a href="#" class="action-button">
+                            <i class="bi bi-three-dots"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="customer-card">
+                <div class="card-header">
+                    <div class="flex items-center">
+                        <div class="customer-avatar">
+                            <img src="../assets/images/avatar3.jpg" alt="客户头像">
+                        </div>
+                        <div class="customer-info">
+                            <div class="flex items-center">
+                                <span class="font-medium text-sm">李先生</span>
+                                <div class="intent-icon intent-high ml-2">高</div>
+                            </div>
+                            <div class="text-xs text-gray-500">137****4321</div>
+                        </div>
+                    </div>
+                    <span class="stage-badge stage-purchase">已成交</span>
+                </div>
+                <div class="card-body">
+                    <div class="text-sm font-medium">购买：奥迪A6L 2019款 2.0T</div>
+                    <div class="customer-meta">
+                        <span><i class="bi bi-calendar-check"></i>成交日期：上月28日</span>
+                        <span><i class="bi bi-wallet2"></i>成交价：36.8万</span>
+                        <span><i class="bi bi-person-badge"></i>来源：朋友介绍</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="text-xs text-gray-500">车辆已交付，无后续问题</div>
+                    <div class="action-buttons">
+                        <a href="tel:13712345678" class="action-button">
+                            <i class="bi bi-telephone"></i>
+                        </a>
+                        <a href="#" class="action-button">
+                            <i class="bi bi-chat-dots"></i>
+                        </a>
+                        <a href="#" class="action-button">
+                            <i class="bi bi-three-dots"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="customer-card">
+                <div class="card-header">
+                    <div class="flex items-center">
+                        <div class="customer-avatar">
+                            <img src="../assets/images/avatar4.jpg" alt="客户头像">
+                        </div>
+                        <div class="customer-info">
+                            <div class="flex items-center">
+                                <span class="font-medium text-sm">刘女士</span>
+                                <div class="intent-icon intent-low ml-2">低</div>
+                            </div>
+                            <div class="text-xs text-gray-500">135****6789</div>
+                        </div>
+                    </div>
+                    <span class="stage-badge stage-inquiry">咨询期</span>
+                </div>
+                <div class="card-body">
+                    <div class="text-sm font-medium">意向：未明确，倾向中型SUV</div>
+                    <div class="customer-meta">
+                        <span><i class="bi bi-calendar-check"></i>最近跟进：3天前</span>
+                        <span><i class="bi bi-wallet2"></i>预算：20-30万</span>
+                        <span><i class="bi bi-person-badge"></i>来源：线上广告</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="text-xs text-gray-500">对比多家，暂未确定品牌</div>
+                    <div class="action-buttons">
+                        <a href="tel:13512345678" class="action-button">
+                            <i class="bi bi-telephone"></i>
+                        </a>
+                        <a href="#" class="action-button">
+                            <i class="bi bi-chat-dots"></i>
+                        </a>
+                        <a href="#" class="action-button">
+                            <i class="bi bi-three-dots"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 添加按钮 -->
+        <a href="#" class="add-button">
+            <i class="bi bi-plus-lg"></i>
+        </a>
+        
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+            <a href="dashboard.html" class="bottom-nav-item">
+                <i class="bi bi-house-door"></i>
+                <span>首页</span>
+            </a>
+            <a href="leads.html" class="bottom-nav-item">
+                <i class="bi bi-funnel"></i>
+                <span>线索</span>
+            </a>
+            <a href="customers.html" class="bottom-nav-item active">
+                <i class="bi bi-people-fill"></i>
+                <span>客户</span>
+            </a>
+            <a href="analytics.html" class="bottom-nav-item">
+                <i class="bi bi-bar-chart"></i>
+                <span>数据</span>
+            </a>
+            <a href="profile.html" class="bottom-nav-item">
+                <i class="bi bi-person"></i>
+                <span>我的</span>
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 标签页切换
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // 客户卡片点击效果
+            const cards = document.querySelectorAll('.customer-card');
+            cards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.closest('.action-button')) {
+                        this.style.backgroundColor = '#f9fafb';
+                        setTimeout(() => {
+                            this.style.backgroundColor = '';
+                        }, 200);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

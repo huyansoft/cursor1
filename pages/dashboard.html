@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页 - 二手车销售管理系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/preview-fix.css" id="preview-fix-css">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #3a5998 100%);
+            color: white;
+            padding: 1rem 0.75rem 2rem;
+            border-radius: 0 0 1.25rem 1.25rem;
+            position: relative;
+            margin-bottom: 3.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-avatar {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        }
+
+        .performance-card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            padding: 0.75rem;
+            margin: 0 0.75rem;
+            position: absolute;
+            bottom: -2.75rem;
+            left: 0;
+            right: 0;
+        }
+
+        .badge-rank {
+            width: 2rem;
+            height: 2rem;
+            font-size: 1rem;
+            margin-right: 0.5rem;
+        }
+
+        .gold-badge {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            box-shadow: 0 2px 5px rgba(255, 165, 0, 0.3);
+            color: white;
+        }
+        
+        .stats-card {
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: 0.5rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-title i {
+            margin-right: 0.375rem;
+            color: var(--secondary-color);
+        }
+        
+        .ai-suggestion {
+            background-color: rgba(247, 112, 85, 0.1);
+            border-left: 3px solid var(--secondary-color);
+            padding: 0.5rem;
+            margin-top: 0.375rem;
+            border-radius: 0 0.25rem 0.25rem 0;
+            font-size: 0.75rem;
+        }
+        
+        .lead-item, .task-item, .car-item {
+            display: flex;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .lead-item:last-child, .task-item:last-child, .car-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .lead-icon, .task-icon, .car-icon, .car-img {
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+        
+        .lead-content, .task-content, .car-content {
+            flex: 1;
+        }
+        
+        .lead-title, .task-title, .car-title {
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+        
+        .lead-subtitle, .task-subtitle, .car-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .task-priority {
+            display: inline-block;
+            padding: 0.125rem 0.375rem;
+            border-radius: 9999px;
+            font-size: 0.625rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+        
+        .priority-high {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        
+        .priority-medium {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+        
+        .priority-low {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+        
+        .progress-bar {
+            height: 0.25rem;
+            background-color: #f1f5f9;
+            border-radius: 0.125rem;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 0.125rem;
+        }
+        
+        .progress-high {
+            background-color: var(--success-color);
+        }
+        
+        .progress-medium {
+            background-color: var(--warning-color);
+        }
+        
+        .progress-low {
+            background-color: var(--danger-color);
+        }
+        
+        .car-price {
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        
+        .plan-checkbox {
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 0.25rem;
+            border: 1px solid var(--border-color);
+            margin-right: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .plan-checkbox.checked {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+            color: white;
+        }
+        
+        .tag-container {
+            margin-top: 0.375rem;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 0.125rem 0.375rem;
+            border-radius: 9999px;
+            font-size: 0.625rem;
+            background-color: #f1f5f9;
+            color: var(--text-secondary);
+            margin-right: 0.375rem;
+        }
+        
+        .tag-blue {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+        
+        .tag-amber {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+        
+        .tag-green {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+        
+        .tag-red {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        
+        .tag-purple {
+            background-color: rgba(139, 92, 246, 0.1);
+            color: #8b5cf6;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+            margin-left: 0.375rem;
+        }
+        
+        .badge-secondary {
+            background-color: var(--secondary-color);
+        }
+        
+        .badge-blue {
+            background-color: #3b82f6;
+        }
+        
+        /* 调整文字大小 */
+        .text-xs { 
+            font-size: 0.7rem !important; 
+        }
+        
+        .text-sm { 
+            font-size: 0.75rem !important; 
+        }
+        
+        .text-base { 
+            font-size: 0.85rem !important; 
+        }
+        
+        .text-lg { 
+            font-size: 0.95rem !important; 
+        }
+        
+        .text-xl { 
+            font-size: 1.1rem !important; 
+        }
+        
+        button {
+            font-size: 0.75rem;
+        }
+        
+        /* 调整间距 */
+        .mb-4 { margin-bottom: 0.75rem !important; }
+        .mb-3 { margin-bottom: 0.5rem !important; }
+        .mb-2 { margin-bottom: 0.375rem !important; }
+        .mb-1 { margin-bottom: 0.25rem !important; }
+        .mt-4 { margin-top: 0.75rem !important; }
+        .mt-3 { margin-top: 0.5rem !important; }
+        .mt-2 { margin-top: 0.375rem !important; }
+        .mt-1 { margin-top: 0.25rem !important; }
+        .p-4 { padding: 0.75rem !important; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="app-container">
+        <!-- 英雄区 - 新的吸引人的顶部区域 -->
+        <div class="hero-section">
+            <!-- 搜索栏移到顶部 -->
+            <div class="search-bar">
+                <i class="bi bi-search"></i>
+                <input type="text" placeholder="搜索车型、客户或线索...">
+            </div>
+            
+            <div class="flex justify-between items-center mb-2">
+                <div>
+                    <h1 class="text-lg font-bold">智车管家</h1>
+                    <p class="text-xs opacity-80">2023年8月21日 星期一</p>
+                </div>
+                <div class="relative">
+                    <i class="bi bi-bell text-lg"></i>
+                    <span class="absolute -top-1 -right-1 bg-secondary text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">5</span>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between mb-3">
+                <div>
+                    <h2 class="font-medium text-sm opacity-90">欢迎回来，张伟</h2>
+                    <p class="text-xs opacity-80 mt-0.5">今日工作需要您的关注！</p>
+                </div>
+                <div class="hero-avatar">
+                    <img src="../assets/images/real-avatar.jpg" alt="用户头像">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-4 gap-2 mb-3">
+                <div class="text-center bg-white/10 rounded-md py-1.5 px-1">
+                    <div class="text-xs opacity-80">本月业绩</div>
+                    <div class="text-sm font-bold mt-0.5">￥132.8万</div>
+                </div>
+                <div class="text-center bg-white/10 rounded-md py-1.5 px-1">
+                    <div class="text-xs opacity-80">成交台数</div>
+                    <div class="text-sm font-bold mt-0.5">12台</div>
+                </div>
+                <div class="text-center bg-white/10 rounded-md py-1.5 px-1">
+                    <div class="text-xs opacity-80">完成率</div>
+                    <div class="text-sm font-bold mt-0.5">88.5%</div>
+                </div>
+                <div class="text-center bg-white/10 rounded-md py-1.5 px-1">
+                    <div class="text-xs opacity-80">排名</div>
+                    <div class="text-sm font-bold mt-0.5">1<span class="text-xs">st</span></div>
+                </div>
+            </div>
+
+            <!-- 业绩卡片，位于Hero区域之下 -->
+            <div class="performance-card">
+                <div class="flex items-center">
+                    <div class="badge-rank gold-badge mr-3">
+                        1
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center mb-1">
+                            <div class="font-semibold text-sm text-gray-800">销售冠军</div>
+                            <div class="text-xs text-secondary font-medium">8月排名</div>
+                        </div>
+                        <div class="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-secondary rounded-full" style="width: 88.5%;"></div>
+                        </div>
+                        <div class="flex justify-between items-center mt-1">
+                            <div class="text-xs text-gray-500">距离目标：¥17.2万</div>
+                            <div class="text-xs text-gray-500">目标：¥150万</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-4 pb-20">
+            <!-- AI智能提醒 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="bi bi-robot"></i>
+                        <span>AI智能提醒</span>
+                    </div>
+                    <span class="text-xs text-secondary">3条新提醒</span>
+                </div>
+                <div class="ai-suggestion">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="font-medium text-sm">高意向客户即将流失</span>
+                        <span class="text-xs text-red-500">紧急</span>
+                    </div>
+                    <p class="text-xs text-gray-600">李先生（奔驰E级意向客户）已7天未联系，建议今日内电话沟通</p>
+                </div>
+                <div class="ai-suggestion mt-2">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="font-medium text-sm">今日推荐跟进客户</span>
+                        <span class="text-xs text-amber-500">重要</span>
+                    </div>
+                    <p class="text-xs text-gray-600">张女士对比预算后可能下调价格区间，建议推荐2020款奥迪A6L</p>
+                </div>
+                <div class="ai-suggestion mt-2">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="font-medium text-sm">库存车辆价格预警</span>
+                        <span class="text-xs text-blue-500">提示</span>
+                    </div>
+                    <p class="text-xs text-gray-600">3辆车辆库存超过45天，建议下调价格5-8%提高周转率</p>
+                </div>
+                <button class="w-full py-2 mt-3 bg-white border border-gray-200 rounded-lg text-xs font-medium">查看全部提醒</button>
+            </div>
+
+            <!-- 今日数据概览 -->
+            <div class="mb-4">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-sm font-semibold text-gray-700">今日数据概览</h2>
+                    <div class="text-xs text-gray-500">vs 昨日</div>
+                </div>
+                <div class="grid grid-cols-4 gap-2">
+                    <div class="stats-card py-2">
+                        <div class="text-xs text-gray-500">新增线索</div>
+                        <div class="text-xl font-bold text-primary mt-1">12</div>
+                        <div class="flex items-center text-xs mt-1">
+                            <span class="text-green-500 flex items-center">
+                                <i class="bi bi-arrow-up-short text-base"></i>+2
+                            </span>
+                        </div>
+                    </div>
+                    <div class="stats-card py-2">
+                        <div class="text-xs text-gray-500">客户到访</div>
+                        <div class="text-xl font-bold text-primary mt-1">8</div>
+                        <div class="flex items-center text-xs mt-1">
+                            <span class="text-red-500 flex items-center">
+                                <i class="bi bi-arrow-down-short text-base"></i>-1
+                            </span>
+                        </div>
+                    </div>
+                    <div class="stats-card py-2">
+                        <div class="text-xs text-gray-500">成交台数</div>
+                        <div class="text-xl font-bold text-secondary mt-1">3</div>
+                        <div class="flex items-center text-xs mt-1">
+                            <span class="text-gray-500 flex items-center">
+                                <i class="bi bi-dash text-base"></i>持平
+                            </span>
+                        </div>
+                    </div>
+                    <div class="stats-card py-2">
+                        <div class="text-xs text-gray-500">销售金额</div>
+                        <div class="text-xl font-bold text-secondary mt-1">68.5<span class="text-sm font-normal">万</span></div>
+                        <div class="flex items-center text-xs mt-1">
+                            <span class="text-green-500 flex items-center">
+                                <i class="bi bi-arrow-up-short text-base"></i>+12.3万
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 待跟进线索 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="bi bi-funnel"></i>
+                        <span>待跟进线索</span>
+                        <span class="badge badge-secondary">8</span>
+                    </div>
+                    <a href="leads.html" class="text-xs text-secondary">查看全部</a>
+                </div>
+                
+                <div class="lead-item">
+                    <div class="lead-icon bg-secondary/10 text-secondary">
+                        <i class="bi bi-person"></i>
+                    </div>
+                    <div class="lead-content">
+                        <div class="lead-title">张先生 <span class="task-priority priority-high">紧急</span></div>
+                        <div class="lead-subtitle">意向：奔驰E级 | 预算：25-35万</div>
+                        <div class="tag-container">
+                            <span class="tag tag-red">7天未联系</span>
+                            <span class="tag tag-blue">高意向</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lead-item">
+                    <div class="lead-icon bg-amber-100 text-amber-600">
+                        <i class="bi bi-person"></i>
+                    </div>
+                    <div class="lead-content">
+                        <div class="lead-title">李女士 <span class="task-priority priority-medium">今日</span></div>
+                        <div class="lead-subtitle">意向：奥迪A6L | 预算：30-40万</div>
+                        <div class="tag-container">
+                            <span class="tag tag-amber">价格敏感</span>
+                            <span class="tag tag-green">已到店看车</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lead-item">
+                    <div class="lead-icon bg-blue-100 text-blue-600">
+                        <i class="bi bi-person"></i>
+                    </div>
+                    <div class="lead-content">
+                        <div class="lead-title">王先生 <span class="task-priority priority-low">明日</span></div>
+                        <div class="lead-subtitle">意向：宝马3系 | 预算：20-30万</div>
+                        <div class="tag-container">
+                            <span class="tag tag-blue">首次购车</span>
+                            <span class="tag tag-purple">需贷款方案</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="w-full py-2 mt-3 text-white bg-secondary rounded-lg text-xs font-medium">现在跟进</button>
+            </div>
+
+            <!-- 今日任务 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="bi bi-check2-square"></i>
+                        <span>今日任务</span>
+                        <span class="badge badge-blue">5</span>
+                    </div>
+                    <a href="#" class="text-xs text-secondary">全部任务</a>
+                </div>
+                
+                <div class="task-item">
+                    <div class="plan-checkbox">
+                        <i class="bi bi-check text-xs"></i>
+                    </div>
+                    <div class="task-content">
+                        <div class="task-title">联系张先生确认看车时间 <span class="task-priority priority-high">10:30</span></div>
+                        <div class="progress-bar">
+                            <div class="progress-fill progress-low" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="task-item">
+                    <div class="plan-checkbox checked">
+                        <i class="bi bi-check text-xs"></i>
+                    </div>
+                    <div class="task-content">
+                        <div class="task-title">准备李女士的贷款方案 <span class="task-priority priority-medium">14:00</span></div>
+                        <div class="progress-bar">
+                            <div class="progress-fill progress-high" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="task-item">
+                    <div class="plan-checkbox">
+                        <i class="bi bi-check text-xs"></i>
+                    </div>
+                    <div class="task-content">
+                        <div class="task-title">王先生试驾安排 <span class="task-priority priority-high">15:30</span></div>
+                        <div class="progress-bar">
+                            <div class="progress-fill progress-medium" style="width: 50%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="w-full py-2 mt-3 bg-white border border-gray-200 rounded-lg text-xs font-medium">管理任务</button>
+            </div>
+
+            <!-- 最新车源 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="bi bi-car-front"></i>
+                        <span>最新车源</span>
+                        <span class="badge badge-secondary">3</span>
+                    </div>
+                    <a href="#" class="text-xs text-secondary">全部车辆</a>
+                </div>
+                
+                <div class="car-item">
+                    <img src="../assets/images/car1.jpg" alt="奔驰E级" class="car-img">
+                    <div class="car-content">
+                        <div class="car-title">2020款 奔驰E300L</div>
+                        <div class="car-subtitle">
+                            <span class="car-price">32.8万</span> · 
+                            <span>2.0万公里</span> · 
+                            <span>新入库</span>
+                        </div>
+                        <div class="tag-container">
+                            <span class="tag tag-green">热门车型</span>
+                            <span class="tag tag-blue">保养完好</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="car-item">
+                    <img src="../assets/images/car2.jpg" alt="宝马5系" class="car-img">
+                    <div class="car-content">
+                        <div class="car-title">2019款 宝马530Li</div>
+                        <div class="car-subtitle">
+                            <span class="car-price">37.5万</span> · 
+                            <span>3.5万公里</span> · 
+                            <span>今日到店</span>
+                        </div>
+                        <div class="tag-container">
+                            <span class="tag tag-green">准新车</span>
+                            <span class="tag tag-amber">一手车</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="car-item">
+                    <img src="../assets/images/car3.jpg" alt="奥迪A6L" class="car-img">
+                    <div class="car-content">
+                        <div class="car-title">2021款 奥迪A6L</div>
+                        <div class="car-subtitle">
+                            <span class="car-price">41.8万</span> · 
+                            <span>1.8万公里</span> · 
+                            <span>2天前</span>
+                        </div>
+                        <div class="tag-container">
+                            <span class="tag tag-red">降价</span>
+                            <span class="tag tag-blue">4S店车源</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="w-full py-2 mt-3 bg-white border border-gray-200 rounded-lg text-xs font-medium">查看更多车源</button>
+            </div>
+
+            <!-- 业绩目标进度 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="bi bi-graph-up-arrow"></i>
+                        <span>8月业绩目标</span>
+                    </div>
+                    <div class="text-xs text-secondary">21/31天</div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="font-medium">销售台数</span>
+                        <span>18/30台</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill progress-medium" style="width: 60%"></div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="font-medium">销售额</span>
+                        <span>412.6/700万</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill progress-medium" style="width: 59%"></div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="font-medium">新增客户</span>
+                        <span>85/100位</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill progress-high" style="width: 85%"></div>
+                    </div>
+                </div>
+                
+                <button class="w-full py-2 mt-3 bg-white border border-gray-200 rounded-lg text-xs font-medium">查看详细数据</button>
+            </div>
+        </div>
+
+        <!-- AI助手浮动按钮 -->
+        <div class="ai-assistant-fab">
+            <i class="bi bi-robot"></i>
+        </div>
+        
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+            <a href="dashboard.html" class="bottom-nav-item active">
+                <i class="bi bi-house-door-fill"></i>
+                <span>首页</span>
+            </a>
+            <a href="leads.html" class="bottom-nav-item">
+                <i class="bi bi-funnel"></i>
+                <span>线索</span>
+            </a>
+            <a href="customers.html" class="bottom-nav-item">
+                <i class="bi bi-people"></i>
+                <span>客户</span>
+            </a>
+            <a href="analytics.html" class="bottom-nav-item">
+                <i class="bi bi-bar-chart"></i>
+                <span>数据</span>
+            </a>
+            <a href="profile.html" class="bottom-nav-item">
+                <i class="bi bi-person"></i>
+                <span>我的</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html> 
